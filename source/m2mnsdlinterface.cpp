@@ -61,8 +61,11 @@ M2MNsdlInterface::M2MNsdlInterface(M2MNsdlObserver &observer)
   _counter_for_nsdl(0),
   _bootstrap_id(0),
   _unregister_ongoing(false),
-  _identity_accepted(false)
+  _identity_accepted(false),
+  _bootstrap_put_done(false)
+
 {
+
     tr_debug("M2MNsdlInterface::M2MNsdlInterface()");
     __nsdl_interface_list.push_back(this);
     _sn_nsdl_address.addr_len = 0;
@@ -1539,6 +1542,9 @@ nsdl_s * M2MNsdlInterface::get_nsdl_handle()
 void M2MNsdlInterface::handle_bootstrap_put_message(sn_coap_hdr_s *coap_header,
                                                 sn_nsdl_addr_s *address) {
 #ifndef M2M_CLIENT_DISABLE_BOOTSTRAP_FEATURE
+    if (_bootstrap_put_done) {
+        return;
+    }
     tr_debug("M2MNsdlInterface::handle_bootstrap_message");
     uint8_t response_code = COAP_MSG_CODE_RESPONSE_CHANGED;
     sn_coap_hdr_s *coap_response = NULL;
@@ -1617,6 +1623,9 @@ void M2MNsdlInterface::handle_bootstrap_put_message(sn_coap_hdr_s *coap_header,
     if (!success) {
         response_code = COAP_MSG_CODE_RESPONSE_BAD_REQUEST;
         handle_bootstrap_error();
+    }
+    else{
+         _bootstrap_put_done = true;
     }
     coap_response = sn_nsdl_build_response(_nsdl_handle,
                                            coap_header,

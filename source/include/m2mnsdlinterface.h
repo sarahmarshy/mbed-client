@@ -375,6 +375,7 @@ private:
     bool                               _unregister_ongoing;
     String                             _endpoint_name;
     bool                               _identity_accepted;
+    bool                               _bootstrap_put_done;
 
 friend class Test_M2MNsdlInterface;
 
