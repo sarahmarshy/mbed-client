@@ -194,10 +194,12 @@ bool M2MResourceInstance::set_value(const uint8_t *value,
 {
     tr_debug("M2MResourceInstance::set_value()");
     bool success = false;
-    bool value_changed = false;
+    bool value_changed = true;
+    /**
     if(is_value_changed(value,value_length)) {
         value_changed = true;
     }
+    **/
     if( value != NULL && value_length > 0 ) {
         success = true;
 
